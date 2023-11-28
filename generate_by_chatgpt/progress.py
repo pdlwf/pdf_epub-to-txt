@@ -1,29 +1,40 @@
-# progress.py
-from queue import Queue
-from config import DEBUG_V1_1, MAC_DEBUG, WIN_DEBUG
+from PyQt5.QtCore import QObject, pyqtSignal
 
-class ProgressMonitor:
-    def __init__(self, update_ui_callback, total_files=0, completed_files=0):
-        self.update_ui_callback = update_ui_callback
-        self.total_files = total_files
-        self.completed_files = completed_files
-        self.progress_queue = Queue()
+class ProgressMonitor(QObject):
+    # Signal to indicate progress update
+    progress_updated = pyqtSignal(int)
+    # Signal to indicate completion or error
+    status_changed = pyqtSignal(str)
 
-    def check_progress(self):
-        # 处理队列中当前可用的消息
-        while not self.progress_queue.empty():
-            msg = self.progress_queue.get()
-            if isinstance(msg, tuple) and len(msg) == 2:
-                message_type, data = msg
-                if message_type == 'progress_bar':
-                    self.update_ui_callback('progress_bar', int(data))
-                elif message_type == 'file_status':
-                    self.completed_files += 1
-                    if DEBUG_V1_1:
-                        print('self.completed_files', self.completed_files)
-                    self.update_ui_callback('file_status', f"转换文件: {self.completed_files}/{self.total_files}")
+    def __init__(self):
+        super().__init__()
+        self.total_files = 0
+        self.completed_files = 0
 
-        # 检查是否所有文件都已处理完毕
+    def set_total_files(self, total):
+        self.total_files = total
+
+    def update_progress(self):
+        """
+        Update the progress of the file conversion process.
+        """
+        self.completed_files += 1
+        progress = int((self.completed_files / self.total_files) * 100)
+        self.progress_updated.emit(progress)
         if self.completed_files == self.total_files:
-            self.update_ui_callback('completed', None)
-        return self.completed_files, self.total_files
+            self.status_changed.emit('Conversion Completed')
+
+    def reset_progress(self):
+        """
+        Reset the progress monitor to its initial state.
+        """
+        self.total_files = 0
+        self.completed_files = 0
+        self.progress_updated.emit(0)
+        self.status_changed.emit('Ready')
+
+    def report_error(self, message):
+        """
+        Report an error in the conversion process.
+        """
+        self.status_changed.emit(f'Error: {message}')
