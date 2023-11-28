@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>电子书转换工具 - 需求规格说明书</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .content {
+            margin: 0 auto;
+            width: 80%;
+        }
+    </style>
+    <script>
+        function toggleLanguage() {
+            var enElements = document.getElementsByClassName('en');
+            var cnElements = document.getElementsByClassName('cn');
+            for (var i = 0; i < enElements.length; i++) {
+                enElements[i].style.display = (enElements[i].style.display == 'none' ? '' : 'none');
+            }
+            for (var i = 0; i < cnElements.length; i++) {
+                cnElements[i].style.display = (cnElements[i].style.display == 'none' ? '' : 'none');
+            }
+        }
+    </script>
+</head>
+<body onload="toggleLanguage()">
+
+<div class="content">
+    <button onclick="toggleLanguage()">切换语言 / Toggle Language</button>
+    <div class="cn">
+        <!-- 中文内容 -->
+        <h1>需求规格说明书 (SRS) - 电子书转换工具</h1>
+        <h2>1. 引言</h2>
+        <h3>1.1 目的</h3>
+        <p>本文档旨在详细描述电子书转换工具的软件需求，用作开发和验证最终产品是否满足这些需求的基础。</p>
+        <h3>1.2 文档范围</h3>
+        <p>本文档包含电子书转换工具的所有需求，涉及功能性和非功能性需求，包括用户界面设计、性能要求、系统兼容性等。</p>
+        <h2>2. 总体描述</h2>
+        <h3>2.1 产品概述</h3>
+        <p>电子书转换工具是一个桌面应用程序，用于将电子书格式（如PDF和EPUB）转换为文本格式（TXT）。</p>
+        <h3>2.2 用户特征</h3>
+        <p>目标用户包括需要将电子书文件转换为文本格式以便于阅读或处理的个人和专业用户。</p>
+        <h2>3. 功能性需求</h2>
+        <h3>3.1 文件选择</h3>
+        <p>- 用户能够通过对话框选择单个文件或整个文件夹进行转换。</p>
+        <p>- 支持的文件类型应包括PDF和EPUB。</p>
+        <h3>3.2 文件转换</h3>
+        <p>- 应用程序能够将选定的PDF或EPUB文件转换为TXT格式。</p>
+        <p>- 支持批量转换，用户可以选择一个包含多个文件的文件夹。</p>
+        <h3>3.3 进度追踪</h3>
+        <p>- 用户在转换过程中能够看到当前进度状态，包括每个文件的转换进度和总体进度。</p>
+        <p>- 提供实时更新的进度条和完成文件数统计。</p>
+        <h2>4. 非功能性需求</h2>
+        <h3>4.1 性能要求</h3>
+        <p>- 应用程序应能够高效处理大型文件和大量文件的批量转换。</p>
+        <p>- 转换过程中的内存和CPU使用应保持在合理范围内。</p>
+        <h3>4.2 可用性</h3>
+        <p>- 用户界面应简洁直观，易于理解和操作。</p>
+        <p>- 应提供基本的错误处理和用户提示，以指导用户解决常见问题。</p>
+        <h3>4.3 兼容性</h3>
+        <p>- 应用程序应在主要操作系统（如Windows, MacOS, Linux）上运行无误。</p>
+        <h2>5. 系统需求</h2>
+        <h3>5.1 硬件需求</h3>
+        <p>- 兼容标准的个人电脑配置。</p>
+        <p>- 无特殊硬件需求。</p>
+        <h3>5.2 软件需求</h3>
+        <p>- 操作系统：Windows 7/10/11, MacOS, Linux。</p>
+        <p>- Python 3.6及以上版本。</p>
+        <p>- 必要的Python库：PyQt5, ebooklib, BeautifulSoup, PyPDF2。</p>
+        <h2>6. 附录</h2>
+        <h3>6.1 术语</h3>
+        <p>- PDF：便携式文档格式（Portable Document Format）。</p>
+        <p>- EPUB：电子出版物（Electronic Publication）。</p>
+        <p>- TXT：文本文件格式（Text File）。</p>
+        <h3>6.2 参考文献</h3>
+        <p>- <a href="https://docs.python.org/3/">Python官方文档</a></p>
+        <p>- <a href="https://www.riverbankcomputing.com/static/Docs/PyQt5/">PyQt5文档</a></p>
+    </div>
+    <div class="en" style="display:none;">
+        <!-- English content -->
+        <h1>Software Requirement Specification (SRS) - Ebook Conversion Tool</h1>
+        <h2>1. Introduction</h2>
+        <h3>1.1 Purpose</h3>
+        <p>This document aims to detail the software requirements of the Ebook Conversion Tool, serving as a basis for the development and validation of the final product meeting these requirements.</p>
+        <h3>1.2 Scope of the Document</h3>
+        <p>This document covers all the requirements of the Ebook Conversion Tool, including functional and non-functional requirements such as user interface design, performance requirements, and system compatibility.</p>
+        <h2>2. Overall Description</h2>
+        <h3>2.1 Product Overview</h3>
+        <p>The Ebook Conversion Tool is a desktop application designed to convert ebook formats (such as PDF and EPUB) into text format (TXT).</p>
+        <h3>2.2 User Characteristics</h3>
+        <p>The target users include individuals and professionals who need to convert ebook files into text format for easier reading or processing.</p>
+        <h2>3. Functional Requirements</h2>
+        <h3>3.1 File Selection</h3>
+        <p>- Users can select a single file or a folder for conversion via a dialog box.</p>
+        <p>- Supported file types should include PDF and EPUB.</p>
+        <h3>3.2 File Conversion</h3>
+        <p>- The application should be able to convert selected PDF or EPUB files into TXT format.</p>
+        <p>- Batch conversion support, allowing users to select a folder containing multiple files.</p>
+        <h3>3.3 Progress Tracking</h3>
+        <p>- Users should be able to see the current progress status during conversion, including progress for each file and overall progress.</p>
+        <p>- Provide real-time updating progress bars and completed file count.</p>
+        <h2>4. Non-Functional Requirements</h2>
+        <h3>4.1 Performance Requirements</h3>
+        <p>- The application should efficiently handle large files and batch conversions of many files.</p>
+        <p>- Memory and CPU usage during conversion should remain within reasonable limits.</p>
+        <h3>4.2 Usability</h3>
+        <p>- The user interface should be simple, intuitive, and easy to use.</p>
+        <p>- Basic error handling and user prompts should be provided to guide users through common issues.</p>
+        <h3>4.3 Compatibility</h3>
+        <p>- The application should function correctly on major operating systems such as Windows, MacOS, and Linux.</p>
+        <h2>5. System Requirements</h2>
+        <h3>5.1 Hardware Requirements</h3>
+        <p>- Compatible with standard personal computer configurations.</p>
+        <p>- No special hardware requirements.</p>
+        <h3>5.2 Software Requirements</h3>
+        <p>- Operating Systems: Windows 7/10/11, MacOS, Linux.</p>
+        <p>- Python version 3.6 or higher.</p>
+        <p>- Required Python libraries: PyQt5, ebooklib, BeautifulSoup, PyPDF2.</p>
+        <h2>6. Appendices</h2>
+        <h3>6.1 Terminology</h3>
+        <p>- PDF: Portable Document Format.</p>
+        <p>- EPUB: Electronic Publication.</p>
+        <p>- TXT: Text File Format.</p>
+        <h3>6.2 References</h3>
+        <p>- <a href="https://docs.python.org/3/">Python Official Documentation</a></p>
+        <p>- <a href="https://www.riverbankcomputing.com/static/Docs/PyQt5/">PyQt5 Documentation</a></p>
+    </div>
+</div>
+
+</body>
+</html>
