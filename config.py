@@ -1,3 +1,3 @@
 DEBUG_V1_1 = False
-MAC_DEBUG = False
-WIN_DEBUG = True
+MAC_DEBUG = True
+WIN_DEBUG = False

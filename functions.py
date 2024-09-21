@@ -6,7 +6,8 @@ import os
 import PyPDF2
 import threading
 from config import DEBUG_V1_1, MAC_DEBUG, WIN_DEBUG
-
+import docx
+import textract
 
 # 开启子进程进行文件转换
 def convert_file_to_txt_threaded(file_path, output_file_path, file_type, max_size, progress_queue, completed_files):
@@ -43,7 +44,7 @@ def traverse_directory(directory_path):
 
 def sort_files(file_paths):
     # 先过滤掉不是 epub 或 pdf 的文件，然后排序
-    filtered_paths = filter(lambda x: determine_file_type(x) in ['epub', 'pdf'], file_paths)
+    filtered_paths = filter(lambda x: determine_file_type(x) in ['epub', 'pdf', 'doc', 'docx'], file_paths)
     if DEBUG_V1_1:
         print("files:", file_paths)
     return sorted(filtered_paths, key=lambda x: x.lower())
@@ -69,6 +70,10 @@ def determine_file_type(file_path):
         return 'pdf'
     elif ext.lower() == '.epub':
         return 'epub'
+    elif ext.lower() == '.doc':
+        return 'doc'
+    elif ext.lower() == '.docx':
+        return 'doc'
     else:
         return None  # 未知或不支持的文件类型
 
@@ -94,6 +99,9 @@ def convert_file_to_txt(file_path, output_file_path, file_type, max_size, progre
     output_file_index = 0
     current_size = 0
 
+    if file_type == "doc":
+        current_size, output_file_index = convert_doc_to_txt(file_path, output_file_path,
+                                                             output_file_index, current_size, max_size, progress_queue)
     if file_type == "pdf":
         current_size, output_file_index = convert_pdf_to_txt(file_path, output_file_path,
                                                              output_file_index, current_size, max_size, progress_queue)
@@ -133,6 +141,32 @@ def convert_pdf_to_txt(pdf_file_path, output_file_path, output_file_index, curre
         print("PDF文件已转换并保存在: ", output_file_name)
     return current_size, output_file_index
 
+def convert_doc_to_txt(doc_file_path, output_file_path, output_file_index, current_size, max_size, progress_queue):
+    try:
+        file_name = os.path.splitext(os.path.basename(doc_file_path))[0]
+
+        # 根据文件扩展名确定读取方法
+        if doc_file_path.lower().endswith('.docx'):
+            doc = docx.Document(doc_file_path)
+            text = '\n'.join([paragraph.text for paragraph in doc.paragraphs])
+        else:  # 对于 .doc 文件
+            text = textract.process(doc_file_path).decode('utf-8')
+
+        current_size, output_file_index = check_file_size_and_split(text, current_size, output_file_index, max_size)
+        output_file_name = f"{output_file_path}/{file_name}-output-{output_file_index}.txt"
+        write_text_to_file(text, output_file_name)
+
+        progress_queue.put(('progress_bar', 100))  # 假设文档为一页，直接标记为100%完成
+
+    except Exception as e:
+        print(f"转换文档过程中发生错误: {e}")
+        progress_queue.put(('progress_bar', -1))  # 使用特殊值指示错误
+    else:
+        progress_queue.put(('progress_bar', 100))  # 表示转换完成
+
+    if DEBUG_V1_1:
+        print("文档文件已转换并保存在: ", output_file_name)
+    return current_size, output_file_index
 
 def convert_epub_to_txt(epub_file_path, output_file_path, output_file_index, current_size, max_size,
                         progress_queue):
